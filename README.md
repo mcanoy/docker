@@ -22,6 +22,8 @@ docker run -p 8080:8080 -p 50000:50000 -p 9999:9999 --net=host -it -v /var/run/d
 * not sure if the docker certs volume is needed
 * docker version installed is 1.10.3 which aligns to what Red Hat is shipping
 * I disabled SE Linux on my host to make this work locally. There issue is discussed [here](https://bugzilla.redhat.com/show_bug.cgi?id=1046365) and a non-priviledged solution seems to appear [here](https://github.com/dpw/selinux-dockersock)
+* image is in docker hub if you want it [docker hub image](https://hub.docker.com/r/sherl0cks/jenkins-rht-labs/)
+* I've changed the group for docker to 1001 as that is what it is on my host and we need Jenkins user in this group so it can talk to docker daemon
 
 ## Backing up data
 
