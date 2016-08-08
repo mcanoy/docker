@@ -1,4 +1,4 @@
-# Official Jenkins Docker image
+# rht-labs fork of Official Jenkins Docker image
 
 The Jenkins Continuous Integration and Delivery server.
 
@@ -11,32 +11,19 @@ For weekly releases check out [`jenkinsci/jenkins`](https://hub.docker.com/r/jen
 <img src="http://jenkins-ci.org/sites/default/files/jenkins_logo.png"/>
 
 
-# Usage
+# Usage For rht-labs
 
 ```
-docker run -p 8080:8080 -p 50000:50000 jenkins
+docker run -p 8080:8080 -p 50000:50000 -p 9999:9999 --net=host -it -v /var/run/docker.sock:/var/run/docker.sock -v /your/home/volume:/var/jenkins_home:Z -v /etc/docker/certs.d:/etc/docker/certs.d:Z --name jenkins rht-labs/jenkins
 ```
 
-NOTE: read below the _build executors_ part for the role of the `50000` port mapping.
+# Notes
 
-This will store the workspace in /var/jenkins_home. All Jenkins data lives in there - including plugins and configuration.
-You will probably want to make that a persistent volume (recommended):
-
-```
-docker run -p 8080:8080 -p 50000:50000 -v /your/home:/var/jenkins_home jenkins
-```
-
-This will store the jenkins data in `/your/home` on the host.
-Ensure that `/your/home` is accessible by the jenkins user in container (jenkins user - uid 1000) or use `-u some_other_user` parameter with `docker run`.
-
-
-You can also use a volume container:
-
-```
-docker run --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home jenkins
-```
-
-Then myjenkins container has the volume (please do read about docker volume handling to find out more).
+* not sure if the docker certs volume is needed
+* docker version installed is 1.10.3 which aligns to what Red Hat is shipping
+* I disabled SE Linux on my host to make this work locally. There issue is discussed [here](https://bugzilla.redhat.com/show_bug.cgi?id=1046365) and a non-priviledged solution seems to appear [here](https://github.com/dpw/selinux-dockersock)
+* image is in docker hub if you want it [docker hub image](https://hub.docker.com/r/sherl0cks/jenkins-rht-labs/)
+* I've changed the group for docker to 1001 as that is what it is on my host and we need Jenkins user in this group so it can talk to docker daemon
 
 ## Backing up data
 
